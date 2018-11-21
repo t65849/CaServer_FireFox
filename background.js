@@ -9,7 +9,7 @@ function genericOnClick(info, tab) {
 
 function createMenus() {
     var parent = browser.menus.create({
-        "title": "使用分機撥打電話給browser Extension", //撥打分機給%s
+        "title": "使用分機撥打電話給%s", //撥打分機給browser Extension
         "contexts": ['all'],
         "onclick": genericOnClick
     });
@@ -57,6 +57,9 @@ function callout(destination) {
                     }, function () {
                         // Update status to let user know options were saved.
                     });
+                }, error: function(reg){
+                    $('#showtext').text("連線失敗!");
+                    //return callout(destination);
                 }
             });
         } else {
@@ -69,9 +72,10 @@ function callout(destination) {
 };
 /*
 browser.runtime.onInstalled.addListener(function () {
+    console.log('123');
     browser.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
-
+            console.log('456');
             console.log("The color is green.");
             console.log(sender.tab ?
                 "来自内容脚本：" + sender.tab.url :
@@ -83,7 +87,6 @@ browser.runtime.onInstalled.addListener(function () {
             text = text.replace('(', '');
             text = text.replace(')', '');
             text = text.replace('#', ',');
-            alert(text)
             if (isMobile(text) || isTel(text) || hasExtension(text) || localnumber(text)) {
                 //createMenus();
                 if(testt == false){
@@ -91,7 +94,7 @@ browser.runtime.onInstalled.addListener(function () {
                     testt = true;
                 }
             } else
-                browser.menus.removeAll(function () {
+                browser.contextMenus.removeAll(function () {
                     testt = false
                 });
                 sendResponse({
@@ -122,5 +125,4 @@ function localnumber(text) {
     var pattern = new RegExp(/\d{4}$/);
     //alert('hasExtension: '+text.match(pattern))
     return text.match(pattern)
-}
-*/
+}*/

@@ -1,7 +1,7 @@
 $(document).mouseup(function () {
     getselecttext();
-    alert('123');
 });
+
 function getselecttext() {
     var t = '';
     if (window.getSelection) {
@@ -17,7 +17,7 @@ function getselecttext() {
     var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
     var x = e.pageX || e.clientX + scrollX;
     var y = e.pageY || e.clientY + scrollY;
-    alert(t)
+
     browser.runtime.sendMessage({
         text: String(t)
     }, function (response) {
