@@ -190,7 +190,6 @@ function checkStatus() {
                     if(secondcount<=10){
                         secondcount++;
                         $('#showtext').text("檢查連線中...");
-                        alert(secondcount);
                         //setTimeout(checkStatus,1000);
                         setTimeout(function(){
                             return checkStatus()
