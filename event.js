@@ -4,18 +4,18 @@ $(document).mouseup(function () {
 
 function getselecttext() {
     var t = '';
-    if (window.getSelection && window.getSelection()!='') {
+    if (window.getSelection && window.getSelection() != '') {
         t = window.getSelection();
-    } else if (document.getSelection && document.getSelection()!='') {
+    } else if (document.getSelection && document.getSelection() != '') {
         t = document.getSelection();
 
     } else if (document.activeElement.value.substring(
-        document.activeElement.selectionStart,
-        document.activeElement.selectionEnd) != '') {
+            document.activeElement.selectionStart,
+            document.activeElement.selectionEnd) != '') {
         t = document.activeElement.value.substring(
             document.activeElement.selectionStart,
             document.activeElement.selectionEnd);
-    
+
     }
     console.log(t)
     /*
@@ -32,6 +32,13 @@ function getselecttext() {
 
 
 }
+
+browser.runtime.onMessage.addListener(request => {
+    console.log("Message from the background script:");
+    console.log(request.greeting);
+    alert(request.greeting)
+    return Promise.resolve({response: "Hi from content script"});
+  });
 
 function handleResponse(message) {
     console.log(`Message from the background script:  ${message.farewell}`);

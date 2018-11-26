@@ -2,7 +2,7 @@
     "name": "CaServer Chrome Extension",
     "version": "1.0",
     "description": "tsti大世科 CaServer Chrome Extension",
-    "permissions": ["storage", "menus", "activeTab","http://localhost/*","http://127.0.0.1/*","http://127.0.0.1:1337/*","http://127.0.0.1/*"],
+    "permissions": ["storage", "contextMenus", "activeTab","http://localhost/*","http://127.0.0.1/*","http://127.0.0.1:1337/*","http://127.0.0.1/*"],
     "background": {
         "scripts": ["background.js","/pages/scripts/jquery/jquery-2.1.0.min.js"]
     },

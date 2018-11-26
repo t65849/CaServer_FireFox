@@ -1,14 +1,14 @@
-createMenus();
 var testt = false;
+
 function genericOnClick(info, tab) {
     var number_destinationid = (info.selectionText ? info.selectionText : ""); //滑鼠選起來的號碼
     number_destinationid = number_destinationid.trim();
-    number_destinationid = number_destinationid.replace('(', '').replace(')', '').replace('(', '').replace(')', '').replace('-', '').replace('-', '').replace('#', ','); 
+    number_destinationid = number_destinationid.replace('(', '').replace(')', '').replace('(', '').replace(')', '').replace('-', '').replace('-', '').replace('#', ',');
     callout(number_destinationid);
 }
 
 function createMenus() {
-    var parent = browser.menus.create({
+    var parent = browser.contextMenus.create({
         "title": "使用分機撥打電話給%s", //撥打分機給browser Extension
         "contexts": ['all'],
         "onclick": genericOnClick
@@ -57,26 +57,38 @@ function callout(destination) {
                     }, function () {
                         // Update status to let user know options were saved.
                     });
-                }, error: function(reg){
+                },
+                error: function (reg) {
                     $('#showtext').text("連線失敗!");
                     //return callout(destination);
                 }
             });
         } else {
-            alert('你未設定撥號話機，請設定撥號話機');
-            browser.tabs.create({
-                url: browser.extension.getURL('options.html')
-            });
+            //alert('你未設定撥號話機，請設定撥號話機');
+            browser.tabs.query({
+                currentWindow: true,
+                active: true
+              }).then(sendMessageToTabs).catch(onError);
         }
     });
 };
-/*
+function sendMessageToTabs(tabs) {
+    for (let tab of tabs) {
+      browser.tabs.sendMessage(
+        tab.id,
+        {greeting: "你未設定撥號話機，請設定撥號話機"}
+      ).then(response => {
+        browser.tabs.create({
+            url: browser.extension.getURL('options.html')
+        });
+        console.log("Message from the content script:");
+        console.log(response.response);
+      }).catch(onError);
+    }
+  }
 browser.runtime.onInstalled.addListener(function () {
-    console.log('123');
     browser.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
-            console.log('456');
-            console.log("The color is green.");
             console.log(sender.tab ?
                 "来自内容脚本：" + sender.tab.url :
                 "来自扩展程序");
@@ -89,7 +101,7 @@ browser.runtime.onInstalled.addListener(function () {
             text = text.replace('#', ',');
             if (isMobile(text) || isTel(text) || hasExtension(text) || localnumber(text)) {
                 //createMenus();
-                if(testt == false){
+                if (testt == false) {
                     createMenus();
                     testt = true;
                 }
@@ -97,9 +109,9 @@ browser.runtime.onInstalled.addListener(function () {
                 browser.contextMenus.removeAll(function () {
                     testt = false
                 });
-                sendResponse({
-                    farewell: "已收到"
-                });
+            sendResponse({
+                farewell: "已收到選取文字"
+            });
         });
 });
 
@@ -125,4 +137,12 @@ function localnumber(text) {
     var pattern = new RegExp(/\d{4}$/);
     //alert('hasExtension: '+text.match(pattern))
     return text.match(pattern)
-}*/
+}
+
+function handleResponse(message) {
+    console.log(`Message from the background script:  ${message.farewell}`);
+}
+
+function handleError(error) {
+    console.log(`Error: ${error}`);
+}

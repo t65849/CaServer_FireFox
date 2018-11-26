@@ -21,7 +21,7 @@ browser.storage.local.get({
 $(document).ready(function () {
     $('#makecall').click(function () { //撥出電話
         if ($('#destinationid').val() != '') {
-            if (name === '' || stationid === '') {
+            if (name === '' || stationid === '' || caserverurl ==='') {
                 alert('你未設定撥號話機，請設定撥號話機');
                 browser.tabs.create({
                     url: browser.extension.getURL('options.html')
