@@ -68,24 +68,26 @@ function callout(destination) {
             browser.tabs.query({
                 currentWindow: true,
                 active: true
-              }).then(sendMessageToTabs).catch(onError);
+            }).then(sendMessageToTabs).catch(onError);
         }
     });
 };
+
 function sendMessageToTabs(tabs) {
     for (let tab of tabs) {
-      browser.tabs.sendMessage(
-        tab.id,
-        {greeting: "你未設定撥號話機，請設定撥號話機"}
-      ).then(response => {
-        browser.tabs.create({
-            url: browser.extension.getURL('options.html')
-        });
-        console.log("Message from the content script:");
-        console.log(response.response);
-      }).catch(onError);
+        browser.tabs.sendMessage(
+            tab.id, {
+                greeting: "你未設定撥號話機，請設定撥號話機"
+            }
+        ).then(response => {
+            browser.tabs.create({
+                url: browser.extension.getURL('options.html')
+            });
+            console.log("Message from the content script:");
+            console.log(response.response);
+        }).catch(onError);
     }
-  }
+}
 browser.runtime.onInstalled.addListener(function () {
     browser.runtime.onMessage.addListener(
         function (request, sender, sendResponse) {
@@ -93,7 +95,11 @@ browser.runtime.onInstalled.addListener(function () {
                 "来自内容脚本：" + sender.tab.url :
                 "来自扩展程序");
             console.log(request.text);
-
+            if (request.noset == 'noset') {
+                browser.tabs.create({
+                    url: browser.extension.getURL('options.html')
+                });
+            }
             var text = request.text.trim().replace('-', '');
             text = text.replace('-', '');
             text = text.replace('(', '');
