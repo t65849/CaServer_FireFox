@@ -49,48 +49,7 @@ $(document).ready(function () {
                     }
 
                 })
-                chrome.storage.local.set({
-                    destinationid: destinationid,
-                    token: Mytoken
-                }, function () {
-                    // Update status to let user know options were saved.
-                    $.ajax({
-                        "async": true,
-                        "crossDomain": true,
-                        "url": caserverurl + '/makecall',
-                        /*https://tstiticctcstest.herokuapp.com/phone*/
-                        "method": "POST",
-                        headers: {
-                            'accept': 'application/json',
-                            'x-access-token': Mytoken,
-                            'Content-Type': 'application/json',
-                            "cache-control": "no-cache"
-                        },
-                        "processData": false,
-                        "data": JSON.stringify({
-                            "stationid": stationid,
-                            "destinationid": destinationid,
-                            "name": name
-                        }),
-                        success: function (reg) {
-                            if (reg.success === false) {
-                                $('#showtext').text("撥號失敗");
-                                setTimeout(checkStatus, 1000);
-                            } else {
-                                $('#showtext').text("正在撥號請等候...");
-                                //延遲一秒function checkStatus()，因為直接跑會出現結束通話狀態，延遲一秒後才會出現撥號中
-                                setTimeout(checkStatus, 1000);
-                                callid = reg.callid;
-                                return callid;
-                            }
-                        },
-                        error: function (reg) {
-                            $('#showtext').text("連線失敗!");
-                            //$('#makecall').trigger('click');
-                        }
-                    });
-                    checkStatus();
-                });
+                
             }
         } else {
             $('#showtext').text("請輸入號碼");

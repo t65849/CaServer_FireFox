@@ -39,7 +39,7 @@ function save_options() {
 // Restores select box and checkbox state using the preferences stored in browser.storage.
 function restore_options() {
     // Use default value color = 'red' and likesColor = true.
-    chrome.storage.local.get({
+    browser.storage.local.get({
         stationid: '',
         caserverurl: '',
         name: '',

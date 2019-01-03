@@ -7,6 +7,7 @@ var password = '';
 var secondcount = 0;
 var Mytoken = '';
 var changeevent;
+
 browser.storage.local.get({
     stationid: '',
     destinationid: '',
